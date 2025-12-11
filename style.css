@@ -1,0 +1,184 @@
+:root {
+    --bg-color: #000;
+    --display-color: #fff;
+    --num-btn-bg: #333;
+    --fn-btn-bg: #a6a6a6;
+    --op-btn-bg: #ff9f0a;
+    --op-btn-hover: #fff;
+    --op-btn-text: #fff;
+}
+
+/* Reset básico y configuración para la app */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent; /* Evita el toque azul en móviles */
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden; /* Importante para la estética de la app */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+}
+
+.calculator {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    padding: 10px;
+    padding-top: env(safe-area-inset-top, 10px); /* Manejo del notch/barra superior */
+    padding-bottom: env(safe-area-inset-bottom, 10px); /* Manejo de la barra de inicio */
+}
+
+/* --- Barra Superior (Menú y Título) --- */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    color: var(--display-color);
+    margin-bottom: 20px;
+}
+
+.magic-button, .top-right-button {
+    background: none;
+    border: none;
+    color: var(--display-color);
+    cursor: pointer;
+    padding: 5px;
+    height: 35px;
+    width: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.8; /* Ligeramente más apagado */
+}
+
+.app-title {
+    font-size: 1.2em;
+    font-weight: 500;
+}
+
+/* --- Display (Pantalla) --- */
+.display {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+    color: var(--display-color);
+    text-align: right;
+    padding: 0 10px;
+    overflow: hidden;
+}
+
+#expression {
+    font-size: 1.5em;
+    opacity: 0.6;
+    height: 30px;
+    margin-bottom: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: clip; /* No queremos los puntos suspensivos */
+}
+
+#result {
+    font-size: 5em;
+    font-weight: 200;
+    line-height: 1;
+    max-height: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: font-size 0.2s; /* Para reducir el tamaño en números largos */
+}
+
+/* --- Teclado (Keypad) --- */
+.keypad {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 12px;
+    padding-bottom: 12px;
+}
+
+.btn {
+    border: none;
+    border-radius: 50%;
+    color: white;
+    height: 80px;
+    width: 80px;
+    font-size: 2em;
+    color: var(--display-color);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.1s;
+    user-select: none; /* Evita selección de texto */
+}
+
+/* Botones Numéricos (Gris Oscuro) */
+.num-btn {
+    background-color: var(--num-btn-bg);
+}
+
+.num-btn:active {
+    background-color: #555;
+}
+
+/* Botones de Función (AC, +/-, %) - Gris Claro */
+.fn-btn {
+    background-color: #666;
+    color: white; /* Texto negro */
+}
+
+.fn-btn:active {
+    background-color: #666;
+}
+
+/* Botones de Operación (Naranja) */
+.op-btn, .eq-btn {
+    background-color: var(--op-btn-bg);
+    color: var(--op-btn-text);
+    font-size: 2.5em;
+    font-weight: 400;
+}
+
+.op-btn:active, .eq-btn:active {
+    background-color: #fff;
+    color: var(--op-btn-bg);
+}
+
+/* Botón de Borrar (Icono X) */
+.delete svg {
+    width: 50px;
+    height: 50px;
+}
+.btn.fn-btn.delete svg {
+    color: white; 
+}
+/* Botón C/AC */
+.clear {
+    font-weight: 500;
+}
+
+/* Botón C (Cambio de AC) */
+.clear.c-mode {
+    content: "C";
+}
+
+/* Adaptación para pantallas más pequeñas (opcional, mejora la experiencia) */
+@media (max-width: 400px) {
+    .keypad {
+        grid-gap: 10px;
+    }
+    .btn {
+        height: 70px;
+        font-size: 1.8em;
+    }
+    #result {
+        font-size: 5em;
+    }
+}
