@@ -2,7 +2,7 @@
     "name": "Calculadora",
     "short_name": "Calc",
     "description": "Una calculadora con un truco de magia incorporado.",
-    "start_url": "index.html",
+    "start_url": "Magic-Calc/index.html",
     "display": "standalone",
     "background_color": "#000000",
     "theme_color": "#000000",
@@ -20,3 +20,4 @@
     ]
 
 }
+
