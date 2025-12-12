@@ -108,8 +108,8 @@ html, body {
     border-radius: 50%;
     color: white;
     height: 90px;
-    width: 90px;
-    font-size: 3em;
+    width: 85px;
+    font-size: 4em;
     color: var(--display-color);
     cursor: pointer;
     display: flex;
@@ -183,3 +183,4 @@ html, body {
     }
 
 }
+
