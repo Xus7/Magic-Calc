@@ -107,7 +107,7 @@ html, body {
     border: none;
     border-radius: 50%;
     color: white;
-    height: 95px;
+    height: 100px;
     width: 85px;
     font-size: 4em;
     color: var(--display-color);
@@ -183,5 +183,6 @@ html, body {
     }
 
 }
+
 
 
