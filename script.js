@@ -29,9 +29,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Ajuste de tamaño de fuente
-        if (currentNumber.length > 9) {
+        if (currentNumber.length > 10) {
             resultDisplay.style.fontSize = '3em';
-        } else if (currentNumber.length > 7) {
+        } else if (currentNumber.length > 8) {
             resultDisplay.style.fontSize = '4em';
         } else {
             resultDisplay.style.fontSize = '5em';
@@ -296,3 +296,4 @@ document.addEventListener('DOMContentLoaded', () => {
     updateDisplay();
 
 });
+
