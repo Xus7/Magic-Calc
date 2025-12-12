@@ -100,16 +100,16 @@ html, body {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-gap: 12px;
-    padding-bottom: 12px;
+    padding-bottom: 60px;
 }
 
 .btn {
     border: none;
     border-radius: 50%;
     color: white;
-    height: 80px;
-    width: 80px;
-    font-size: 2em;
+    height: 90px;
+    width: 90px;
+    font-size: 3em;
     color: var(--display-color);
     cursor: pointer;
     display: flex;
@@ -181,4 +181,5 @@ html, body {
     #result {
         font-size: 5em;
     }
+
 }
