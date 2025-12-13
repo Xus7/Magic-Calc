@@ -92,6 +92,7 @@ html, body {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    padding-bottom: 10px;
     transition: font-size 0.2s; /* Para reducir el tamaño en números largos */
 }
 
@@ -107,7 +108,7 @@ html, body {
     border: none;
     border-radius: 50%;
     color: white;
-    height: 80px;
+    height: 85px;
     width: 80px;
     font-size: 4em;
     color: var(--display-color);
@@ -183,6 +184,7 @@ html, body {
     }
 
 }
+
 
 
 
