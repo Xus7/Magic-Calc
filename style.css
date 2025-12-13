@@ -99,7 +99,7 @@ html, body {
 .keypad {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-gap: 12px;
+    grid-gap: 8px;
     padding-bottom: 60px;
 }
 
@@ -107,8 +107,8 @@ html, body {
     border: none;
     border-radius: 50%;
     color: white;
-    height: 85px;
-    width: 85px;
+    height: 90px;
+    width: 90px;
     font-size: 4em;
     color: var(--display-color);
     cursor: pointer;
@@ -183,6 +183,7 @@ html, body {
     }
 
 }
+
 
 
 
