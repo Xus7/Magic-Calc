@@ -7,7 +7,38 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>Calculadora Mágica</title>
-    <link rel="stylesheet" href="style.css">
+
+    <link rel="stylesheet" id="css-link" href="style.css"> 
+    <script src="script.js" id="js-script" defer></script> 
+    
+    <script>
+        function getTimestamp() {
+            const now = new Date();
+            const year = now.getFullYear().toString();
+            const month = (now.getMonth() + 1).toString().padStart(2, '0');
+            const day = now.getDate().toString().padStart(2, '0');
+            const hour = now.getHours().toString().padStart(2, '0');
+            const minute = now.getMinutes().toString().padStart(2, '0');
+            const second = now.getSeconds().toString().padStart(2, '0');
+        
+            return `${year}${month}${day}${hour}${minute}${second}`;
+        }
+
+        const version = getTimestamp();
+
+        // 1. Modificar el CSS
+        const cssLink = document.getElementById('css-link');
+        if (cssLink) {
+            cssLink.href = cssLink.href + '?v=' + version;
+        }
+
+        // 2. Modificar el JS
+        const jsScript = document.getElementById('js-script');
+        if (jsScript) {
+            jsScript.src = jsScript.src + '?v=' + version;
+        }
+    </script>
+    
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <link rel="apple-touch-icon" href="icon-192.png"> <link rel="manifest" href="manifest.json">
@@ -66,8 +97,7 @@
             <button class="btn eq-btn" data-action="calculate">=</button>
         </div>
     </div>
-
-    <script src="script.js"></script>
 </body>
 
 </html>
+
