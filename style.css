@@ -107,8 +107,8 @@ html, body {
     border: none;
     border-radius: 50%;
     color: white;
-    height: 85px;
-    width: 85px;
+    height: 80px;
+    width: 80px;
     font-size: 4em;
     color: var(--display-color);
     cursor: pointer;
@@ -183,6 +183,7 @@ html, body {
     }
 
 }
+
 
 
 
