@@ -173,17 +173,18 @@ html, body {
 /* Adaptación para pantallas más pequeñas (opcional, mejora la experiencia) */
 @media (max-width: 400px) {
     .keypad {
-        grid-gap: 10px;
+        grid-gap: 12px;
     }
     .btn {
-        height: 70px;
-        font-size: 1.8em;
+        height: 80px;
+        font-size: 2em;
     }
     #result {
         font-size: 5em;
     }
 
 }
+
 
 
 
