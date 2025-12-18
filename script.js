@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // 3. Formatear la fecha como ddmmaaaahhmm
             const d = String(now.getDate()).padStart(2, '0');
             const m = String(now.getMonth() + 1).padStart(2, '0'); // Mínimo 0 es Enero
-            const a = now.getFullYear();
+            const a = now.getFullYear() % 100;
             const h = String(now.getHours()).padStart(2, '0');
             const min = String(now.getMinutes()).padStart(2, '0');
             
@@ -296,4 +296,5 @@ document.addEventListener('DOMContentLoaded', () => {
     updateDisplay();
 
 });
+
 
