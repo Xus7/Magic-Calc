@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const now = new Date();
             
             // 2. Sumar 2 minutos
-            now.setMinutes(now.getMinutes() + 2);
+            now.setMinutes(now.getMinutes() + 1);
             
             // 3. Formatear la fecha como ddmmaaaahhmm
             const d = String(now.getDate()).padStart(2, '0');
@@ -296,5 +296,6 @@ document.addEventListener('DOMContentLoaded', () => {
     updateDisplay();
 
 });
+
 
 
