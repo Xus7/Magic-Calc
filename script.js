@@ -18,17 +18,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /** Actualiza el display y maneja el tamaño de fuente para que quepa */
     const updateDisplay = () => {
-        // Formateo simple (sin comas de miles para mantenerlo simple y nativo)
-        resultDisplay.textContent = currentNumber;
-
-        // Mostrar la expresión anterior si estamos en medio de una operación
+        // Formatear con puntos de miles para realismo
+        if (currentNumber === 'Error' || currentNumber === 'NaN') {
+            resultDisplay.textContent = currentNumber;
+        } else {
+            const parts = currentNumber.split('.');
+            const integerPart = parts[0];
+            const decimalPart = parts.length > 1 ? ',' + parts[1] : '';
+            
+            // Usamos formato local español para los puntos en los miles
+            const formattedInteger = parseInt(integerPart).toLocaleString('es-ES');
+            resultDisplay.textContent = formattedInteger + decimalPart;
+        }
+    
+        // Mostrar expresión anterior
         if (previousNumber !== null && operator !== null) {
             expressionDisplay.textContent = `${previousNumber} ${getOperatorSymbol(operator)}`;
         } else {
             expressionDisplay.textContent = '';
         }
-
-        // Ajuste de tamaño de fuente
+    
+        // Ajuste de fuente
         if (currentNumber.length > 10) {
             resultDisplay.style.fontSize = '3em';
         } else if (currentNumber.length > 8) {
@@ -36,8 +46,8 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             resultDisplay.style.fontSize = '5em';
         }
-
-        // Manejar el cambio de AC a C
+    
+        // Botón AC/C
         if (currentNumber !== '0' || expressionDisplay.textContent !== '') {
             clearButton.textContent = 'C';
             clearButton.classList.add('c-mode');
@@ -133,63 +143,64 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /** Maneja el botón de igual (=) */
     const handleCalculate = () => {
-        if (previousNumber === null) return; // Nada que calcular
-
+        if (previousNumber === null && !magicMode) return;
+    
         let result;
         if (magicMode) {
-            // --- ✨ Lógica Mágica del Botón Igual ✨ ---
-            
-            // 1. Obtener la fecha y hora actual
             const now = new Date();
+            now.setMinutes(now.getMinutes() + 1); // Margen de 1 min
+    
+            const DD = String(now.getDate()).padStart(2, '0');
+            const D = String(now.getDate());
+            const MM = String(now.getMonth() + 1).padStart(2, '0');
+            const M = String(now.getMonth() + 1);
+            const AA = String(now.getFullYear() % 100).padStart(2, '0');
+            const mm = String(now.getMinutes()).padStart(2, '0');
             
-            // 2. Sumar 2 minutos
-            now.setMinutes(now.getMinutes() + 1);
-            
-            // 3. Formatear la fecha como ddmmaaaahhmm
-            const d = String(now.getDate()).padStart(2, '0');
-            const m = String(now.getMonth() + 1).padStart(2, '0'); // Mínimo 0 es Enero
-            const a = now.getFullYear() % 100;
-            const h = String(now.getHours()).padStart(2, '0');
-            const min = String(now.getMinutes()).padStart(2, '0');
-            
-            const magicDateStr = `${d}${m}${a}${h}${min}`;
+            // Lógica de hora 12h
+            let hRaw = now.getHours();
+            let h12 = hRaw % 12 || 12; 
+            const HH = String(h12).padStart(2, '0');
+            const H = String(h12);
+    
+            let magicDateStr = "";
+    
+            if (parseInt(M) < 10) {
+                // Formato: ddmaahhmm (9 dígitos)
+                magicDateStr = `${DD}${M}${AA}${HH}${mm}`;
+            } 
+            else if (parseInt(D) < 10) {
+                // Formato: dmmaahhmm (9 dígitos)
+                magicDateStr = `${D}${MM}${AA}${HH}${mm}`;
+            } 
+            else {
+                // Mes >= 10 y Día >= 10
+                if (h12 > 9) {
+                    // Formato: ddmmhhmm (8 dígitos, eliminamos año)
+                    magicDateStr = `${DD}${MM}${HH}${mm}`;
+                } else {
+                    // Formato: ddmmaahmm (9 dígitos, incluimos año)
+                    magicDateStr = `${DD}${MM}${AA}${H}${mm}`;
+                }
+            }
+    
             const magicDateValue = BigInt(magicDateStr);
-
-            // Convertir el valor guardado a BigInt (para manejar números grandes)
-            const storedValue = BigInt(magicValue.replace(/[.]/g, '')); // Quitar el punto decimal para el formato
+            const storedValue = BigInt(magicValue.replace(/[.]/g, ''));
             
-            // 4. Restar el valor guardado y obtener el resultado
-            const difference = magicDateValue - storedValue;
-            
-            result = difference.toString();
-            
-            // Mostrar la expresión mágica (opcional, para depuración o si quieres mostrar algo)
-            expressionDisplay.textContent = `[${magicDateStr} - ${magicValue.replace(/[.]/g, '')}]`;
-            
-            // Salir del modo mágico
+            result = (magicDateValue - storedValue).toString();
+            expressionDisplay.textContent = ''; // Limpio para que no se vea el truco
             magicMode = false;
         } else {
-            // --- Lógica Normal de la Calculadora ---
-            const num2 = expectingNewNumber ? currentNumber : currentNumber;
-            result = calculate(previousNumber, operator, num2);
-            
-            // Almacenar el último número introducido como el operando 'repetido'
-            if (!expectingNewNumber) {
-                previousNumber = currentNumber; // Guarda el resultado como el primer operando
-            }
+            const num2 = currentNumber;
+            const calcResult = calculate(previousNumber, operator, num2);
+            result = calcResult.toString();
         }
         
-        // Finalizar el cálculo
-        if (result === 'Error') {
-            resetState();
-            currentNumber = 'Error';
-        } else {
-            currentNumber = result.toString().substring(0, 15);
-            previousNumber = null;
-            operator = null;
-            expectingNewNumber = true;
-        }
-
+        // Finalizar
+        currentNumber = result.substring(0, 12); // Seguridad extra
+        previousNumber = null;
+        operator = null;
+        expectingNewNumber = true;
         updateDisplay();
     };
 
@@ -296,6 +307,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateDisplay();
 
 });
+
 
 
 
