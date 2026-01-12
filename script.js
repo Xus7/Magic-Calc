@@ -23,32 +23,49 @@ document.addEventListener('DOMContentLoaded', () => {
     const getMagicDate = () => {
         const now = new Date();
         now.setMinutes(now.getMinutes() + 1);
+        
         const DD = String(now.getDate()).padStart(2, '0');
         const D = String(now.getDate());
         const MM = String(now.getMonth() + 1).padStart(2, '0');
         const M = String(now.getMonth() + 1);
         const AA = String(now.getFullYear() % 100).padStart(2, '0');
         const mm = String(now.getMinutes()).padStart(2, '0');
-        let h12 = now.getHours() % 12 || 12; 
-        const HH = String(h12).padStart(2, '0');
-        const H = String(h12);
+        
+        // Formatos de hora
+        const h24Raw = now.getHours();
+        const HH24 = String(h24Raw).padStart(2, '0'); // Formato 24h
+        
+        const h12Raw = h24Raw % 12 || 12;
+        const HH12 = String(h12Raw).padStart(2, '0'); // Formato 12h con 0
+        const H12 = String(h12Raw); // Formato 12h sin 0
 
-        if (parseInt(M) < 10) return `${DD}${M}${AA}${HH}${mm}`; 
-        if (parseInt(D) < 10) return `${D}${MM}${AA}${HH}${mm}`; 
-        return h12 > 9 ? `${DD}${MM}${HH}${mm}` : `${DD}${MM}${AA}${H}${mm}`;
+        // REGLA: Si el mes es < 10, usamos 24h. 
+        // Ejemplo: 12 (DD) + 1 (M) + 26 (AA) + 21 (HH24) + 45 (mm) = 9 dígitos.
+        if (parseInt(M) < 10) {
+            return `${DD}${M}${AA}${HH24}${mm}`; 
+        } 
+        
+        // Si el mes es >= 10 (Oct, Nov, Dic), volvemos a 12h para no superar 9 dígitos
+        if (parseInt(D) < 10) {
+            return `${D}${MM}${AA}${HH12}${mm}`; // 9 dígitos
+        }
+        
+        if (h12Raw > 9) {
+            return `${DD}${MM}${HH12}${mm}`; // 8 dígitos (sin año)
+        } else {
+            return `${DD}${MM}${AA}${H12}${mm}`; // 9 dígitos
+        }
     };
 
     const updateDisplay = () => {
         let displayText = currentNumber;
         if (currentNumber !== 'Error' && currentNumber !== 'NaN') {
             const parts = currentNumber.split('.');
-            // Formatear con puntos de miles para realismo
             let integerPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, "."); 
             displayText = integerPart + (parts.length > 1 ? ',' + parts[1] : '');
         }
         resultDisplay.textContent = displayText;
         
-        // Expresión superior (mostramos coma en lugar de punto)
         if (previousNumber !== null && operator !== null) {
             const opSym = {add:'+', subtract:'-', multiply:'×', divide:'÷'}[operator];
             expressionDisplay.textContent = `${previousNumber.replace('.', ',')} ${opSym}`;
@@ -56,7 +73,6 @@ document.addEventListener('DOMContentLoaded', () => {
             expressionDisplay.textContent = '';
         }
 
-        // Ajuste de tamaño
         resultDisplay.style.fontSize = displayText.length > 10 ? '3.5em' : '5em';
         clearButton.textContent = (currentNumber !== '0' || previousNumber !== null) ? 'C' : 'AC';
     };
@@ -136,12 +152,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!btn) return;
         const action = btn.dataset.action;
 
-        // INTERCEPCIÓN MODO 2 (Forzar números uno a uno)
         if (magicModeForce && action !== 'calculate' && !btn.dataset.operator) {
             if (forcedIdx < forcedString.length) {
                 handleNumber(forcedString[forcedIdx++]);
                 if (forcedIdx === forcedString.length && navigator.vibrate) {
-                    navigator.vibrate(200); // Vibración de aviso: número completo
+                    navigator.vibrate(200); 
                 }
             }
             return;
@@ -159,7 +174,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 res = getMagicDate();
                 magicModeTime = false;
             } else if (magicModeForce) {
-                const n1 = parseFloat(previousNumber), n2 = parseFloat(currentNumber);
+                const n1 = parseFloat(previousNumber || 0);
+                const n2 = parseFloat(currentNumber);
                 res = (n1 + n2).toString();
                 magicModeForce = false;
             } else {
